@@ -1,0 +1,67 @@
+--------------------------------------------------
+-- 1. Creación del objeto vacío
+--------------------------------------------------
+!create centroDistribucion : CentroDistribucion
+!create catalogo : CatalogoProducto
+!create teclado1 : Producto
+!create monitor1 : Producto
+!create mouse1 : Producto
+!create venta1 : Venta
+!create item1Venta1 : Item
+!create venta2 : Venta
+!create item1Venta2 : Item
+!create item2Venta2 : Item
+
+--------------------------------------------------
+-- 2. Setear valores a los atributos
+--------------------------------------------------
+!set centroDistribucion.nombre := 'CentroDistribuciónSantaFe'
+
+!set teclado1.codigo := 'KEY0001'
+!set teclado1.descripcion := 'Teclado español (Incluye teclado numérico)'
+!set teclado1.precio := 500.0
+!set teclado1.stock := 5
+
+!set monitor1.codigo := 'DIS0001'
+!set monitor1.descripcion := 'Monitor LED LG 24 pulgadas'
+!set monitor1.precio := 4352.80
+!set monitor1.stock := 12
+
+!set mouse1.codigo := 'MOU0001'
+!set mouse1.descripcion := 'Mouse óptico GENIUS bluetooth'
+!set mouse1.precio := 584.0
+!set mouse1.stock := 9
+
+!set venta1.fecha := '30/08/19'
+!set venta1.hora := '10:35'
+
+!set item1Venta1.cantidad := 1
+!set item1Venta1.subtotal := 500.0
+
+!set venta2.fecha := '30/08/19'
+!set venta2.hora := '10:58'
+
+!set item1Venta2.cantidad := 1
+!set item1Venta2.subtotal := 4352.80
+
+!set item2Venta2.cantidad := 2
+!set item2Venta2.subtotal := 1168.0
+
+--------------------------------------------------
+-- 3. Insertar los objetos en las relaciones
+--------------------------------------------------
+!insert (centroDistribucion, catalogo) into CentroDistribucionProducto
+!insert (centroDistribucion, venta1) into CentroDistribucionVenta
+!insert (centroDistribucion, venta2) into CentroDistribucionVenta
+
+!insert (catalogo, teclado1) into CatalogoProductoProducto
+!insert (catalogo, monitor1) into CatalogoProductoProducto
+!insert (catalogo, mouse1) into CatalogoProductoProducto
+
+!insert (teclado1, item1Venta1) into ProductoItem
+!insert (monitor1, item1Venta2) into ProductoItem
+!insert (mouse1, item2Venta2) into ProductoItem
+
+!insert (venta1, item1Venta1) into VentaItem
+!insert (venta2, item1Venta2) into VentaItem
+!insert (venta2, item2Venta2) into VentaItem

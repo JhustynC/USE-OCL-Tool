@@ -1,0 +1,81 @@
+model CentroDistribucion
+
+--Clases
+
+class CentroDistribucion
+attributes
+  nombre:String
+end
+
+class CatalogoProducto
+end
+
+class Producto
+attributes 
+  codigo:Integer
+  descripcion:String
+  precio : Real
+  stock : Integer
+operations
+    obtenerPrecio() : Real
+end
+
+class Item
+attributes
+    cantidad : Integer
+    subtotal : Real
+operations
+    obtenerSubtotal() : Real
+end
+
+class Venta
+attributes
+    fecha : String
+    hora : String
+operations
+    obtenerTotal() : Real
+    agregarProducto(p : Producto, cant : Integer) : Item
+end
+
+-- Asociaciones
+
+aggregation CentroDistribucionProducto
+between
+    CentroDistribucion[1] role centroDistribucionCatalogo
+    Producto[1] role catalogo
+end
+
+aggregation CentroDistribucionVenta
+between
+    CentroDistribucion[1] role centroDistribucionVenta
+    Venta[*] role venta
+end
+
+aggregation CatalogoProductoProducto
+between
+    CatalogoProducto[1] role catalogoProducto
+    Producto[*] role producto
+end
+
+association ProductoItem
+between
+    Producto[1] role producto
+    Item[*] role item
+end
+
+association VentaItem
+between
+    Venta[1] role ventaItem
+    Item[1..*] role item
+end
+
+constraints
+
+context Venta::agregarProducto(p : Producto, cant : Integer) : Item
+pre ProductoNoExisteEnVenta :
+    self.item.producto->excludes(p)
+post ItemGenerado :
+    result.oclIsNew() and
+    result.producto = p and
+    result.cantidad = cant and
+    self.item = self.item@pre->including(result)
