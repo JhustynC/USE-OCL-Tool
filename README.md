@@ -15,11 +15,11 @@
 
 ## 2. Pasos para Levantar el Proyecto
 
-1. Descomprimir `use-6.0.0.zip` dentro del disco C:\
+1. Descomprimir `use-6.0.0.zip` dentro del disco `C:\`
 
 2. Dirigirse a `C:\use-6.0.0\bin`
 
-1. Ejecutar USE:
+3. Ejecutar USE:
 
 ```bash
 # En Linux
@@ -29,14 +29,21 @@
 ./use.bat (o doble click al archivo)
 ```
 
-2. Cargar el archivo `model.use` desde la interfaz gráfica (opción *Open Specification* y seleccionar el archivo).
-3. Desde la consola que proporciona el programa, ejecutar el archivo `usage.scenario.soil` mediante el comando:
+4. Cargar el archivo `model.use` desde la interfaz gráfica (opción *Open Specification* y seleccionar el archivo).
+
+5. Copiar el archivo `usage.scenario.soil` a un directorio base como `C:\` o a una carpeta sin tildes ni espacios en el nombre.
+
+3. Desde la consola que proporciona el programa `use>`, ejecutar el archivo `usage.scenario.soil` mediante el comando:
 
 ```bash
-use> open *path_del_archivo*/usage.scenario.soil
+use> open C:\usage.scenario.soil
+
+o
+
+use> open F:\DirectorioEjemplo\usage.scenario.soil
 ```
 
-4. Realizar pruebas sobre las expresiones OCL para verificar y validar el modelo.
+7. Realizar pruebas sobre las expresiones OCL para verificar y validar el modelo. (Seguir el ejemplo en clases)
 
 ---
 
