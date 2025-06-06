@@ -1,90 +1,118 @@
-# Demo de la herramienta USE: UML-based Specification Environment
-#### Realizado por: Jhustyn Carvajal
+
+# Demo de la Herramienta USE: UML-based Specification Environment
+#### Realizado por: Jhustyn Carvajal  
 #### Fecha: 06/06/2025
 
-## 1. Contenido
-- use-6.0.0.zip: Instalador, solo descomprimir en C:// y ejecutar el bin/use.bat
-- model.use: Definicion del modelo UML en lenguaje use
-- usage.scenario.soil: Script para la crecion de instancias del model
+---
 
-## 2. Pasos para levantar el proyecto
-- a. Ejecutar USE
+## 1. Contenido
+
+- `use-6.0.0.zip`: Instalador. Solo es necesario descomprimir en `C://` y ejecutar `bin/use.bat`.
+- `model.use`: Definición del modelo UML en lenguaje USE.
+- `usage.scenario.soil`: Script para la creación de instancias del modelo.
+
+---
+
+## 2. Pasos para Levantar el Proyecto
+
+1. Ejecutar USE:
+
 ```bash
-linux: ./use
-windows: ./use.bat
+# En Linux
+./use
+
+# En Windows
+./use.bat
 ```
-- b. Cargar el model.use desde la interfaz grafica (Open Specification)
-- c. Mediante la consola que proporciona el porgrama, ejecutar el archivo usage.scenario.soil: 
-```bash 
+
+2. Cargar el archivo `model.use` desde la interfaz gráfica (opción *Open Specification*).
+3. Desde la consola que proporciona el programa, ejecutar el archivo `usage.scenario.soil`:
+
+```bash
 use> open ../usage.scenario.soil
 ```
-- d. Realizar pruebas sobre el OCL para verificar y validar el modelo 
 
+4. Realizar pruebas sobre las expresiones OCL para verificar y validar el modelo.
+
+---
 
 ## 3. Pruebas de las Condiciones
 
+### ❌ Fallo en la Precondición
+
+Agrega un producto que **ya existe en la venta**, lo que viola la precondición:
+
 ```bash
-# Hacer fallar la **precondición**
-# Agrega un producto que **ya existe en la venta**, lo que viola la condición definida en:
 use> !openter venta2 agregarProducto(mouse1, 2)
-
 ```
+
+---
+
+### ✅ Cumplimiento de la Precondición
+
+Agrega un producto que **no está en la venta**, cumpliendo con la precondición:
+
 ```bash
-# Cumplir la precondición
-# Agrega un producto que no está en la venta, cumpliendo con la precondición.
 use> !openter venta2 agregarProducto(teclado1, 2)
-
 ```
+
+---
+
+### ❌ Fallo en la Postcondición
+
+Intenta finalizar la operación incorrectamente, por ejemplo, reutilizando un `Item` ya existente (no es un objeto nuevo), lo que rompe la postcondición:
+
 ```bash
-# Hacer fallar la postcondición
-# Intenta finalizar la operación de forma incorrecta, por ejemplo, devolviendo un Item que ya existía (no es un objeto nuevo). Esto rompe la siguiente postcondición:
 use> !opexit itemVenta2
-
 ```
+
+---
+
+### ✅ Validación Correcta de la Postcondición
+
+Flujo completo correcto que respeta todas las condiciones del modelo:
+
 ```bash
-# Validar correctamente la postcondición
-# Este es un flujo completo y correcto, que respeta las condiciones del modelo:
--- 1. Inicia ejecución de la operación agregarProducto en venta2
+-- Paso 1: Inicia la ejecución de la operación agregarProducto en venta2
 !openter venta2 agregarProducto(teclado1, 10)
 
--- 2. Durante la ejecución, se crean o modifican objetos como Item
--- Si estás haciendo esto manualmente:
+-- Paso 2: Crear o modificar objetos durante la ejecución
 !create itemCreadoVenta2 : Item
 !set itemCreadoVenta2.cantidad := 10
 !insert (teclado1, itemCreadoVenta2) into ProductoItem
 !insert (venta2, itemCreadoVenta2) into VentaItem
 
--- 3. Finaliza la operación
+-- Paso 3: Finaliza la operación
 !opexit venta2
-
 ```
 
+---
 
-## 4. Algunas expresiones OCL
+## 4. Expresiones OCL Útiles
 
-```js
-# 1. Verificar si una venta contiene un producto específico
-Venta.allInstances()->any(v | v.fecha = '04/06/2025').item.producto->includes(Producto.allInstances()->any(p | p.codigo = 101))
-# Esto devuelve true si la venta con fecha "04/06/2025" contiene el producto con código 101.
+```ocl
+-- 1. Verificar si una venta contiene un producto específico
+Venta.allInstances()->any(v | v.fecha = '04/06/2025').item.producto->
+    includes(Producto.allInstances()->any(p | p.codigo = 101))
+-- Devuelve true si la venta con fecha "04/06/2025" contiene el producto con código 101.
 
-# 2. Listar todos los productos de una venta específica
+-- 2. Listar todos los productos de una venta específica
 Venta.allInstances()->any(v | v.fecha = '04/06/2025').item.producto
-# Esto muestra una colección de productos relacionados a los ítems de una venta con esa fecha.
+-- Devuelve una colección de productos asociados a los ítems de una venta en esa fecha.
 
-# 3. Verificar si un producto no está en los ítems de una venta (como en el pre)
+-- 3. Verificar si un producto no está en los ítems de una venta
 let v : Venta = Venta.allInstances()->any(v | v.fecha = '04/06/2025') in
 let p : Producto = Producto.allInstances()->any(p | p.codigo = 101) in
 v.item.producto->excludes(p)
-# Esto simula la condición del precondicional ProductoNoExisteEnVenta.
+-- Simula la precondición ProductoNoExisteEnVenta.
 
-# 4. Evaluar el total de una venta (suma de subtotales)\
+-- 4. Calcular el total de una venta (suma de subtotales)
 Venta.allInstances()->any(v | v.fecha = '04/06/2025').item.subtotal->sum()
-# Esto calcula el total de la venta sumando los subtotales de los ítems.
+-- Suma los subtotales de los ítems de una venta para obtener el total.
 
-# 5. Ver si todos los ítems de una venta tienen su subtotal bien calculado (cantidad * precio)
+-- 5. Validar que todos los ítems tienen correctamente calculado su subtotal
 Venta.allInstances()->any(v | v.fecha = '04/06/2025').item->forAll(i |
     i.subtotal = i.cantidad * i.producto.precio
 )
-# Este es un buen test de consistencia del modelo (Simula un "assert" de prueba unitaria).
-
+-- Verifica la consistencia del modelo como si fuera un test unitario.
 ```
