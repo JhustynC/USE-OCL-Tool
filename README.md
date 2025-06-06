@@ -7,13 +7,17 @@
 
 ## 1. Contenido
 
-- `use-6.0.0.zip`: Instalador. Solo es necesario descomprimir en `C://` y ejecutar `bin/use.bat`.
+- `use-6.0.0.zip`: Instalador. 
 - `model.use`: Definición del modelo UML en lenguaje USE.
 - `usage.scenario.soil`: Script para la creación de instancias del modelo.
 
 ---
 
 ## 2. Pasos para Levantar el Proyecto
+
+1. Descomprimir `use-6.0.0.zip` dentro del disco C:\
+
+2. Dirigirse a `C:\use-6.0.0\bin`
 
 1. Ejecutar USE:
 
@@ -22,14 +26,14 @@
 ./use
 
 # En Windows
-./use.bat
+./use.bat (o doble click al archivo)
 ```
 
-2. Cargar el archivo `model.use` desde la interfaz gráfica (opción *Open Specification*).
-3. Desde la consola que proporciona el programa, ejecutar el archivo `usage.scenario.soil`:
+2. Cargar el archivo `model.use` desde la interfaz gráfica (opción *Open Specification* y seleccionar el archivo).
+3. Desde la consola que proporciona el programa, ejecutar el archivo `usage.scenario.soil` mediante el comando:
 
 ```bash
-use> open ../usage.scenario.soil
+use> open *path_del_archivo*/usage.scenario.soil
 ```
 
 4. Realizar pruebas sobre las expresiones OCL para verificar y validar el modelo.
